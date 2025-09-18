@@ -22,8 +22,29 @@ class Usuario(Base):
     __tablename__ = "usuarios" # O nome exato da tabela no banco de dados
 
     id = Column(Integer, primary_key=True, index=True)
-    nome = column(String(255, nullable=False))
-    email = column(String(255), unique=True, nullable=False)
+    nome = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True, nullable=False)
     senha_hash = Column(DateTime(timezone=True), default=datetime.datetime.now)
 
     notas = relationship("Nota", back_populates="autor")
+
+
+class Nota(Base):
+    __tablename__ = "notas"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    id_usuario = Column(Integer, ForeignKey("usuarios.id"), nullable=False)
+    titulo = Column(String(255), nullable=False)
+    conteudo = Column(Text)
+    criado_em = Column(DateTime(timezone=True), default=datetime.datetime.now)
+
+    #relacionamento inverso para o usuario
+    autor = relationship("Usuario", back_populates="notas")
+
+
+if __name__ == "__main__":
+    Base.metadata.create_all(bind=engine)
+    print("Tabelas criadas com sucesso (Se não existiam).")
+
+else:
+    print("Erro")

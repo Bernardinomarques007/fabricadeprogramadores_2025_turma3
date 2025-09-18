@@ -9,3 +9,7 @@ services:
       - POSTGRES_PASSWORD=1234
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    command: postgres -c listen_addresses='*'
+volumes:
+  postgres_data:    
