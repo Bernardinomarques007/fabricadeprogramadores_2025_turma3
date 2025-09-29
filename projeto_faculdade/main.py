@@ -1,4 +1,4 @@
-from tabelas import SessionLocal, Usuario, Nota
+from tabelas import SessionLocal, Usuario, Nota, joinedload
 
 db = SessionLocal()
 
@@ -33,18 +33,32 @@ def atualizar_nota(id_nota: int, titulo: str, conteudo: str):
     
 
 
-def ler_dados(nome):
+def ler_dados():
     """exemplo de como ler dados"""
+    users = db.query(Usuario).options(joinedload(Usuario.notas)).all()
 
-    users = db.query(Usuario).all()
+    resultado = []
 
-    if users:
-        
-        for nota in users.notas:
-            print(f" - Titulo: {nota.titulo} (ID: {nota.id})")
+    for u in users:
+        notas = []
 
-    else:
-        print("Usuario(a) não encontrado.")
+        for n in u.notas:
+            notas.append({
+                "id": n.id,
+                "titulo": n.titulo,
+                "conteudo": n.conteudo,
+                "criado_em": n.criado_em 
+            })
+
+        resultado.append({
+            "id": u.id,
+            "usuario": u.nome,
+            "email": u.email,
+            "criado_em": u.criado_em,
+            "notas": u.notas,
+        })
+ 
+    return resultado
 
 
 def deletar_usuario(id_usuario: int):
