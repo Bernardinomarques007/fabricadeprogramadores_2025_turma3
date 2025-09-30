@@ -49,15 +49,14 @@ def ler_dados():
                 "conteudo": n.conteudo,
                 "criado_em": n.criado_em 
             })
-
+            print(u, n)
         resultado.append({
             "id": u.id,
             "usuario": u.nome,
             "email": u.email,
             "criado_em": u.criado_em,
-            "notas": u.notas,
-        })
- 
+            "notas": notas,
+        })       
     return resultado
 
 
